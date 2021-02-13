@@ -2,10 +2,11 @@ var express = require('express'),
     app = express();
     post = require('./routes/post');
 
+var basicAuth = require('basic-auth-connect');
+app.use(basicAuth('username', 'password'));
 var logger = require('morgan');//npm install morganでインストール済み
 //var methodOverride = require('method-override');
 
-const basicAuth = require('express-basic-auth')
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
@@ -18,13 +19,16 @@ app.use(express.urlencoded()); //画面からデータがとれる
 app.use(logger('dev'));//log
 //app.use(app.router);　・・Express4では不要
 
-app.use(basicAuth({
-    users: { 'admin': 'password' }
-}))
-
+app.use(express.cookieParser());
+app.use(express.session({secret:"4RTdtrt"}));
+app.use(express.csrf());
+app.use(function(req, res, next){
+    res.locals.csrftoken = req.csrfToken();
+    next();
+});
 //routing
 
-app.get('/', post.index, {users: users});//ログイン画面
+app.get('/', post.index);//ログイン画面
 //app.post('/posts/list', post.list);//一覧表示
 app.get('/posts/list', post.list);//一覧表示
 app.post('/posts/list/create', post.create);//追加

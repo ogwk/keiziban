@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "basic-auth-connect": "^1.0.0",
     "express-basic-auth": "^1.2.0",
     "http-auth": "3.2.3"
   }

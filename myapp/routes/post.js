@@ -1,26 +1,12 @@
 const Post = require('../node-postgres/add');
 //basic認証
 
-
-const admins = {
-    'username':{password:'password'}
-};
-
-
-
-
-exports.index=function(req,res,next){
-    const user = auth(req);
-    if(!user || !admins[user.name] || admins[user.name].password !== user.pass){
-        response.set('WWW-Authenticate', 'Basic realm="example"');
-        return response.status(401).send();
-    }else{
-        res.render('posts/index');
-    }
-    return next();
+exports.index=function(req,res,next){    
+    res.render('posts/index');
 };
 
 exports.list=function(req,res){
+    
     Post.findAll().then((posts) => {
         res.render('posts/list', {posts: posts});
     });
